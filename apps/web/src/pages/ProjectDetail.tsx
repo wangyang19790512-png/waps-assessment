@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { api, type FullResult } from '../api'
+
+const API_BASE = (import.meta.env.VITE_API_URL ?? '') + '/api'
 import { toast } from '../components/Toast'
 
 const RATING_CONFIG: Record<string, { bg: string; ring: string; label: string }> = {
@@ -109,7 +111,7 @@ export function ProjectDetail() {
     setAgentProgress({ agentName: '启动中…', index: 0, total: 10, done: false })
     setTab('agents')
 
-    fetch(`/api/assessments/${id}/run-with-agents`, { method: 'POST' })
+    fetch(`${API_BASE}/assessments/${id}/run-with-agents`, { method: 'POST' })
       .then(async res => {
         if (!res.ok || !res.body) {
           const err = await res.json().catch(() => ({ error: 'Failed' }))
@@ -388,7 +390,7 @@ export function ProjectDetail() {
                       <div className="text-4xl mb-3">✦</div>
                       <p className="font-medium text-slate-600 mb-1">AI 深度分析尚未生成</p>
                       <p className="text-sm text-slate-400 mb-5">
-                        需配置 <code className="bg-slate-100 px-1.5 py-0.5 rounded text-xs">ANTHROPIC_API_KEY</code>，点击上方「AI 深度分析」按钮
+                        点击下方按钮，使用 AI 对各维度进行深度解读
                       </p>
                       <button onClick={runWithAgents} className="bg-purple-600 text-white px-5 py-2 rounded-lg text-sm hover:bg-purple-500 transition-colors">
                         ✦ 开始 AI 深度分析
