@@ -8,7 +8,7 @@ import {
   saveProject, loadProject, loadResult, saveResult,
   listProjects, saveReport, loadReport,
   updateProject, deleteProject,
-} from '../storage/json-store.js'
+} from '../storage/store.js'
 
 export const assessmentsRouter = Router()
 
@@ -40,12 +40,12 @@ function validateSections(body: Partial<AssessmentProject>): string | null {
 }
 
 // ── POST /api/assessments ── Create project ──────────────────────────────────
-assessmentsRouter.post('/', (req: Request, res: Response) => {
+assessmentsRouter.post('/', async (req: Request, res: Response) => {
   const err = validateSections(req.body)
   if (err) return res.status(400).json({ error: err })
 
   const project = buildProject(req.body)
-  saveProject(project)
+  await saveProject(project)
 
   return res.status(201).json({
     assessmentId: project.id,
@@ -56,13 +56,13 @@ assessmentsRouter.post('/', (req: Request, res: Response) => {
 })
 
 // ── GET /api/assessments ── List projects ────────────────────────────────────
-assessmentsRouter.get('/', (_req: Request, res: Response) => {
-  const projects = listProjects()
+assessmentsRouter.get('/', async (_req: Request, res: Response) => {
+  const projects = await listProjects()
   return res.json(projects.map(p => ({
     assessmentId: p.project.id,
     projectName: p.project.projectName,
     clientName: p.project.clientName,
-    vesselName: p.project.vessel.vesselName,
+    vesselName: (p.project.vessel as Record<string, unknown>).vesselName,
     status: p.status,
     createdAt: p.createdAt,
     updatedAt: p.updatedAt,
@@ -70,43 +70,43 @@ assessmentsRouter.get('/', (_req: Request, res: Response) => {
 })
 
 // ── GET /api/assessments/:id ── Get project ──────────────────────────────────
-assessmentsRouter.get('/:id', (req: Request, res: Response) => {
-  const stored = loadProject(req.params.id)
+assessmentsRouter.get('/:id', async (req: Request, res: Response) => {
+  const stored = await loadProject(req.params.id)
   if (!stored) return res.status(404).json({ error: 'Assessment not found' })
   return res.json(stored)
 })
 
 // ── PUT /api/assessments/:id ── Update project data ──────────────────────────
-assessmentsRouter.put('/:id', (req: Request, res: Response) => {
-  const stored = loadProject(req.params.id)
+assessmentsRouter.put('/:id', async (req: Request, res: Response) => {
+  const stored = await loadProject(req.params.id)
   if (!stored) return res.status(404).json({ error: 'Assessment not found' })
 
   const err = validateSections(req.body)
   if (err) return res.status(400).json({ error: err })
 
   const project = buildProject(req.body, req.params.id)
-  project.createdAt = stored.createdAt  // preserve original creation time
-  updateProject(project)
+  project.createdAt = stored.createdAt
+  await updateProject(project)
 
   return res.json({ assessmentId: project.id, updatedAt: project.updatedAt })
 })
 
 // ── DELETE /api/assessments/:id ── Delete project ────────────────────────────
-assessmentsRouter.delete('/:id', (req: Request, res: Response) => {
-  const stored = loadProject(req.params.id)
+assessmentsRouter.delete('/:id', async (req: Request, res: Response) => {
+  const stored = await loadProject(req.params.id)
   if (!stored) return res.status(404).json({ error: 'Assessment not found' })
-  deleteProject(req.params.id)
+  await deleteProject(req.params.id)
   return res.json({ deleted: true })
 })
 
 // ── POST /api/assessments/:id/run ── Run assessment ──────────────────────────
-assessmentsRouter.post('/:id/run', (req: Request, res: Response) => {
-  const stored = loadProject(req.params.id)
+assessmentsRouter.post('/:id/run', async (req: Request, res: Response) => {
+  const stored = await loadProject(req.params.id)
   if (!stored) return res.status(404).json({ error: 'Assessment not found' })
 
   try {
     const result = runFullAssessment(stored.project)
-    saveResult(result)
+    await saveResult(result)
 
     return res.json({
       assessmentId: result.projectId,
@@ -127,7 +127,7 @@ assessmentsRouter.post('/:id/run', (req: Request, res: Response) => {
 
 // ── POST /api/assessments/:id/run-with-agents ── SSE streaming agent run ──────
 assessmentsRouter.post('/:id/run-with-agents', async (req: Request, res: Response) => {
-  const stored = loadProject(req.params.id)
+  const stored = await loadProject(req.params.id)
   if (!stored) return res.status(404).json({ error: 'Assessment not found' })
 
   if (!process.env.DEEPSEEK_API_KEY) {
@@ -136,10 +136,10 @@ assessmentsRouter.post('/:id/run-with-agents', async (req: Request, res: Respons
     })
   }
 
-  // SSE headers
   res.setHeader('Content-Type', 'text/event-stream')
   res.setHeader('Cache-Control', 'no-cache')
   res.setHeader('Connection', 'keep-alive')
+  res.setHeader('X-Accel-Buffering', 'no')
   res.flushHeaders()
 
   function send(event: string, data: unknown) {
@@ -158,7 +158,7 @@ assessmentsRouter.post('/:id/run-with-agents', async (req: Request, res: Respons
     })
 
     result.agentSummaries = agentSummaries
-    saveResult(result)
+    await saveResult(result)
 
     send('done', {
       assessmentId: result.projectId,
@@ -176,8 +176,8 @@ assessmentsRouter.post('/:id/run-with-agents', async (req: Request, res: Respons
 })
 
 // ── GET /api/assessments/:id/results ── Get full results ─────────────────────
-assessmentsRouter.get('/:id/results', (req: Request, res: Response) => {
-  const result = loadResult(req.params.id)
+assessmentsRouter.get('/:id/results', async (req: Request, res: Response) => {
+  const result = await loadResult(req.params.id)
   if (!result) {
     return res.status(404).json({
       error: 'Results not found. Run POST /api/assessments/:id/run first.',
@@ -187,11 +187,11 @@ assessmentsRouter.get('/:id/results', (req: Request, res: Response) => {
 })
 
 // ── POST /api/assessments/:id/report ── Generate Markdown report ─────────────
-assessmentsRouter.post('/:id/report', (req: Request, res: Response) => {
-  const stored = loadProject(req.params.id)
+assessmentsRouter.post('/:id/report', async (req: Request, res: Response) => {
+  const stored = await loadProject(req.params.id)
   if (!stored) return res.status(404).json({ error: 'Assessment not found' })
 
-  const result = loadResult(req.params.id)
+  const result = await loadResult(req.params.id)
   if (!result) {
     return res.status(400).json({
       error: 'No results found. Run POST /api/assessments/:id/run first.',
@@ -199,14 +199,14 @@ assessmentsRouter.post('/:id/report', (req: Request, res: Response) => {
   }
 
   const markdown = renderReport(stored.project, result)
-  const filePath = saveReport(req.params.id, markdown)
+  await saveReport(req.params.id, markdown)
 
-  return res.json({ assessmentId: req.params.id, reportMarkdown: markdown, reportFilePath: filePath })
+  return res.json({ assessmentId: req.params.id, reportMarkdown: markdown })
 })
 
 // ── GET /api/assessments/:id/report ── Get existing report ───────────────────
-assessmentsRouter.get('/:id/report', (req: Request, res: Response) => {
-  const markdown = loadReport(req.params.id)
+assessmentsRouter.get('/:id/report', async (req: Request, res: Response) => {
+  const markdown = await loadReport(req.params.id)
   if (!markdown) {
     return res.status(404).json({
       error: 'Report not found. Run POST /api/assessments/:id/report first.',
