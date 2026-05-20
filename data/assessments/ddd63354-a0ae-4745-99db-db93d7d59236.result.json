@@ -1,0 +1,257 @@
+{
+  "projectId": "ddd63354-a0ae-4745-99db-db93d7d59236",
+  "totalScore": 54,
+  "rating": "D",
+  "recommendation": "research_only",
+  "scores": {
+    "vesselSuitability": 75,
+    "routeWind": 65,
+    "economic": 15,
+    "shippingOperation": 73,
+    "classRisk": 50,
+    "stabilityStructure": 37,
+    "policyCompliance": 68,
+    "dataCompleteness": 85
+  },
+  "recommendedWapsType": "rotor_sail",
+  "alternativeWapsTypes": [
+    "suction_wing",
+    "rigid_wing_sail",
+    "soft_sail"
+  ],
+  "fuelSaving": {
+    "conservativeRate": 0.0158,
+    "baseRate": 0.0264,
+    "optimisticRate": 0.0475,
+    "conservativeFuelSavingT": 40,
+    "baseFuelSavingT": 66,
+    "optimisticFuelSavingT": 119,
+    "assumptions": [
+      "有效风能利用率：34.5%",
+      "推进贡献系数（保守/中性/乐观）：6% / 10% / 18%",
+      "系统可用率：90%",
+      "控制效率因子：85%"
+    ],
+    "uncertaintyFactors": [
+      "实际节油率取决于真实气象条件与航线风向分布",
+      "推进贡献系数在详细 VPP 计算前属于区间估算",
+      "系统实际可用率受维护周期和故障率影响",
+      "建议以中性情景作为规划基准"
+    ]
+  },
+  "co2Reduction": {
+    "conservativeCo2ReductionT": 125,
+    "baseCo2ReductionT": 206,
+    "optimisticCo2ReductionT": 371,
+    "emissionFactorUsed": 3.114,
+    "notes": [
+      "使用 IMO 排放因子：3.114 tCO₂/t 燃油（VLSFO）",
+      "CO₂ 减排量为直接燃烧排放，未包含生命周期排放",
+      "可用于 CII 评级改善和 ESG 报告"
+    ]
+  },
+  "economics": {
+    "capexLowUsd": 600000,
+    "capexBaseUsd": 1200000,
+    "capexHighUsd": 2200000,
+    "annualOpexUsd": 35000,
+    "annualFuelCostSavingConservativeUsd": 26000,
+    "annualFuelCostSavingBaseUsd": 42900,
+    "annualFuelCostSavingOptimisticUsd": 77350,
+    "paybackYearsConservative": null,
+    "paybackYearsBase": 151.9,
+    "paybackYearsOptimistic": 28.3,
+    "economicScore": 15,
+    "sensitivityNotes": [
+      "燃油价格每波动 $100/t，年收益变化约 $6,600",
+      "CAPEX 区间较大，建议取得供应商正式报价后更新",
+      "若 CII 等政策产生额外经济价值，实际回收期将缩短"
+    ]
+  },
+  "vesselSuitability": {
+    "score": 75,
+    "level": "medium_high",
+    "positiveFactors": [
+      "船型（general_cargo）非常适合 WAPS 改造",
+      "服务航速 12 kn，有利于风能推进贡献",
+      "甲板可用面积 180 m²，安装空间充裕",
+      "年运营天数 280 天，经济收益高"
+    ],
+    "constraints": [
+      "装卸作业与 WAPS 存在中度冲突，需优化布置"
+    ],
+    "redFlags": [],
+    "requiresNavalArchitectReview": true
+  },
+  "routeWind": {
+    "score": 65,
+    "averageTrueWindSpeedMs": 7.8,
+    "favorableWindPercentage": 46,
+    "effectiveWindUtilizationRatio": 0.34500000000000003,
+    "seasonalVariability": "medium",
+    "bestSeason": "季风季节（东北季风 / 西南季风高峰期）",
+    "worstSeason": "季风转换期",
+    "routeRecommendation": "suitable_with_seasonal_variation"
+  },
+  "wapsMatching": {
+    "recommendedType": "rotor_sail",
+    "alternativeTypes": [
+      "suction_wing",
+      "rigid_wing_sail",
+      "soft_sail"
+    ],
+    "notRecommendedTypes": [
+      "kite_system"
+    ],
+    "reasoning": [
+      "船型非常适合转子帆",
+      "航速适中，转子帆推进贡献率高",
+      "甲板空间充足"
+    ],
+    "technologyRisks": [],
+    "nextValidationTasks": [
+      "确认甲板可用区域的精确尺寸和承载能力",
+      "开展航线气象详细分析（ERA5 或商业气象数据）",
+      "与设备供应商获取初步方案和报价",
+      "联系 DNV 进行早期技术预沟通"
+    ]
+  },
+  "policyCompliance": {
+    "score": 68,
+    "imoCiiBenefit": "high",
+    "eexiBenefit": "medium",
+    "fuelEuBenefit": "not_applicable",
+    "euEtsBenefit": "not_applicable",
+    "esgValue": "high",
+    "greenFinanceValue": "high",
+    "applicablePolicies": [
+      "IMO CII",
+      "IMO EEXI",
+      "SEEMP",
+      "ESG 披露",
+      "绿色金融 / 绿色债券",
+      "国内绿色航运示范计划"
+    ],
+    "policyUncertainties": [
+      "政策法规持续演变，评估结论需随政策更新动态维护"
+    ],
+    "notes": [
+      "WAPS 节油直接改善 CII 年度评级，同时可能辅助 EEXI 达标",
+      "WAPS 改装应纳入 SEEMP 第三部分节能措施",
+      "WAPS 改装可提升公司 ESG 评分，支持绿色融资和 ESG 报告",
+      "WAPS 项目可申请绿色船舶贷款或绿色债券，降低融资成本",
+      "可申请国内绿色航运补贴或示范项目资金支持",
+      "本评估不构成合规意见，不可替代专业法律或合规顾问建议"
+    ]
+  },
+  "shippingOperation": {
+    "score": 73,
+    "impactLevel": "medium",
+    "majorConflicts": [],
+    "mitigationMeasures": [],
+    "operationalRedFlags": [],
+    "crewTrainingRequired": true,
+    "portOperationReviewRequired": false,
+    "insuranceReviewRequired": false
+  },
+  "classRisk": {
+    "score": 50,
+    "approvalComplexity": "medium_high",
+    "likelyRequiredDocuments": [
+      "改装申请书（Application for Approval）",
+      "改装描述文件（Modification Description）",
+      "更新后的稳性计算书",
+      "甲板结构图（含加强方案）",
+      "总布置图（General Arrangement）",
+      "重量与重心计算书",
+      "转子帆控制系统安全分析",
+      "应急停止程序",
+      "稳性验证报告（含 WAPS 重量和重心）",
+      "甲板基座结构计算书",
+      "控制系统描述文件",
+      "操作手册（含应急停止程序）",
+      "船员培训计划"
+    ],
+    "keyClassConcerns": [
+      "稳性手册缺失，船级社将要求提交更新的稳性计算书",
+      "结构图纸缺失，甲板基座设计无法验证，船级社将要求提交",
+      "总布置图未提供，安装位置合理性无法评估",
+      "转子帆旋转机构需提供故障安全停止设计文件"
+    ],
+    "recommendedClassEngagementStage": "before_concept_design",
+    "requiresFmea": false,
+    "requiresStabilityAssessment": true,
+    "requiresStructuralReview": true,
+    "requiresSeaTrialPlan": true
+  },
+  "stabilityStructure": {
+    "score": 37,
+    "stabilityRiskLevel": "medium",
+    "structureRiskLevel": "unknown",
+    "requiresNavalArchitectReview": true,
+    "requiresDeckFoundationReview": true,
+    "keyRisks": [],
+    "missingCriticalData": [
+      "稳性手册",
+      "结构图纸",
+      "倾斜试验数据"
+    ]
+  },
+  "dataCompleteness": {
+    "score": 85,
+    "level": "high",
+    "canGeneratePreliminaryReport": true,
+    "requiresExpertReview": false,
+    "criticalMissingFields": [],
+    "optionalMissingFields": [
+      "vessel.mainEnginePowerKw",
+      "route.originPort",
+      "route.destinationPort",
+      "deck.maxAllowableInstallationHeightM",
+      "deck.generalArrangementAvailable",
+      "stability.stabilityBookletAvailable",
+      "stability.structuralDrawingsAvailable"
+    ],
+    "recommendedDataRequests": []
+  },
+  "agentSummaries": [],
+  "risks": [
+    {
+      "id": "R1",
+      "category": "regulatory",
+      "severity": "medium",
+      "description": "稳性手册缺失，船级社将要求提交更新的稳性计算书",
+      "mitigation": "尽早与船级社开展预沟通"
+    },
+    {
+      "id": "R2",
+      "category": "regulatory",
+      "severity": "medium",
+      "description": "结构图纸缺失，甲板基座设计无法验证，船级社将要求提交",
+      "mitigation": "尽早与船级社开展预沟通"
+    },
+    {
+      "id": "R3",
+      "category": "regulatory",
+      "severity": "medium",
+      "description": "总布置图未提供，安装位置合理性无法评估",
+      "mitigation": "尽早与船级社开展预沟通"
+    },
+    {
+      "id": "R4",
+      "category": "financial",
+      "severity": "medium",
+      "description": "经济回收期较长或无法回收，投资价值存在不确定性",
+      "mitigation": "完善燃油基线数据，结合政策减排价值综合评估"
+    }
+  ],
+  "dataGaps": [],
+  "nextActions": [
+    {
+      "priority": "before_next_stage",
+      "action": "委托船舶设计院完成 WAPS 改装后稳性验算",
+      "responsible": "船东 / 设计院"
+    }
+  ],
+  "generatedAt": "2026-05-19T19:29:55.599Z"
+}

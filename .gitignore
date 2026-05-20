@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+*.local
+
+# Keep data dir structure but not actual data
+apps/api/data/assessments/*.json
+apps/api/data/assessments/*.result.json
+apps/api/data/assessments/*.report.md

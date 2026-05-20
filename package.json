@@ -1,0 +1,21 @@
+{
+  "name": "waps-assessment",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "pnpm --filter @waps/web build && pnpm --filter @waps/api build",
+    "build:web": "pnpm --filter @waps/web build",
+    "build:api": "pnpm --filter @waps/api build",
+    "typecheck": "pnpm -r typecheck",
+    "dev:api": "pnpm --filter @waps/api dev",
+    "dev:web": "pnpm --filter @waps/web dev",
+    "start": "pnpm --filter @waps/api start"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0",
+    "@types/node": "^20.14.0"
+  }
+}

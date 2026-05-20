@@ -1,0 +1,72 @@
+{
+  "project": {
+    "id": "ddd63354-a0ae-4745-99db-db93d7d59236",
+    "projectName": "Batch3 Agent Test",
+    "clientName": "Test Shipping",
+    "createdAt": "2026-05-19T19:29:40.030Z",
+    "updatedAt": "2026-05-19T19:29:40.030Z",
+    "vessel": {
+      "vesselName": "Test Vessel",
+      "vesselType": "general_cargo",
+      "loaM": 120,
+      "beamM": 20,
+      "serviceSpeedKn": 12,
+      "yearBuilt": 2015,
+      "dwtT": 10000,
+      "grossTonnage": 8000,
+      "classSociety": "DNV",
+      "flag": "Singapore"
+    },
+    "route": {
+      "routeName": "Singapore �� Jakarta",
+      "routeDistanceNm": 580,
+      "voyageCountPerYear": 40,
+      "seasonalPattern": "monsoon",
+      "callsEuPorts": false
+    },
+    "fuel": {
+      "fuelType": "VLSFO",
+      "annualFuelConsumptionT": 2500,
+      "fuelPriceUsdPerT": 650,
+      "annualOperatingDays": 280
+    },
+    "weather": {
+      "averageTrueWindSpeedMs": 7.8,
+      "favorableWindPercentage": 46,
+      "seasonalVariability": "medium"
+    },
+    "deck": {
+      "availableDeckAreaM2": 180,
+      "cargoOperationConflict": "medium",
+      "craneOperationConflict": "low",
+      "bridgeVisibilityImpact": "low"
+    },
+    "stability": {
+      "gmM": 1.8,
+      "maxAllowableAdditionalWeightT": 50,
+      "deckLoadLimitTPerM2": 3.5,
+      "stabilityBookletAvailable": false,
+      "structuralDrawingsAvailable": false,
+      "incliningTestDataAvailable": false
+    },
+    "operation": {
+      "annualOperatingDays": 280,
+      "cargoOperationType": "bulk",
+      "crewSkillLevel": "medium",
+      "scheduleSensitivity": "medium",
+      "insuranceConcernLevel": "low",
+      "portRestrictionLevel": "low"
+    },
+    "policy": {
+      "imoCiiApplicable": true,
+      "eexiApplicable": true,
+      "seempApplicable": true,
+      "esgReportingRequired": true,
+      "greenFinanceInterest": true,
+      "domesticGreenShippingProgram": true
+    }
+  },
+  "status": "completed",
+  "createdAt": "2026-05-19T19:29:40.030Z",
+  "updatedAt": "2026-05-19T19:29:55.600Z"
+}
