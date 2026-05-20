@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.24.3",
+    "openai": "^4.67.0",
     "@waps/schemas": "workspace:*"
   },
   "devDependencies": {
