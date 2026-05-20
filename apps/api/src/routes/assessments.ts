@@ -130,9 +130,9 @@ assessmentsRouter.post('/:id/run-with-agents', async (req: Request, res: Respons
   const stored = loadProject(req.params.id)
   if (!stored) return res.status(404).json({ error: 'Assessment not found' })
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.DEEPSEEK_API_KEY) {
     return res.status(400).json({
-      error: 'ANTHROPIC_API_KEY is not configured. Use POST /run for deterministic-only assessment.',
+      error: 'DEEPSEEK_API_KEY is not configured. Use POST /run for deterministic-only assessment.',
     })
   }
 
