@@ -88,7 +88,9 @@ export function ProjectDetail() {
 
   useEffect(() => {
     if (!id) return
-    api.getResults(id).then(setResult).catch(() => {})
+    api.getResults(id).then(setResult).catch((e: Error) => {
+      if (!e.message.includes('Results not found')) toast.error('加载评估结果失败')
+    })
   }, [id])
 
   async function runAssessment() {

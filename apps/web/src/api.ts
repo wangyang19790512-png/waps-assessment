@@ -64,9 +64,11 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     headers: { 'Content-Type': 'application/json' },
     ...options,
   })
-  const data = await res.json()
-  if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`)
-  return data as T
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({})) as { error?: string }
+    throw new Error(data.error || `HTTP ${res.status}`)
+  }
+  return res.json() as Promise<T>
 }
 
 export interface StoredProject {

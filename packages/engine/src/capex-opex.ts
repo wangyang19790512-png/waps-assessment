@@ -62,9 +62,9 @@ export function calculateEconomics(
     annualFuelCostSavingConservativeUsd: Math.round(savingConservative),
     annualFuelCostSavingBaseUsd: Math.round(savingBase),
     annualFuelCostSavingOptimisticUsd: Math.round(savingOptimistic),
-    paybackYearsConservative: calcPayback(cost.capexBase, netConservative),
+    paybackYearsConservative: calcPayback(cost.capexHigh, netConservative),
     paybackYearsBase: paybackBase,
-    paybackYearsOptimistic: calcPayback(cost.capexBase, netOptimistic),
+    paybackYearsOptimistic: calcPayback(cost.capexLow, netOptimistic),
     economicScore: economicScore(paybackBase),
     sensitivityNotes: [
       `燃油价格每波动 $100/t，年收益变化约 $${Math.round(fuelSaving.baseFuelSavingT * 100).toLocaleString()}`,

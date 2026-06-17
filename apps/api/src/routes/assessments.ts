@@ -142,8 +142,11 @@ assessmentsRouter.post('/:id/run-with-agents', async (req: Request, res: Respons
   res.setHeader('X-Accel-Buffering', 'no')
   res.flushHeaders()
 
+  let aborted = false
+  req.on('close', () => { aborted = true })
+
   function send(event: string, data: unknown) {
-    res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
+    if (!aborted) res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`)
   }
 
   try {
@@ -157,16 +160,17 @@ assessmentsRouter.post('/:id/run-with-agents', async (req: Request, res: Respons
       },
     })
 
-    result.agentSummaries = agentSummaries
-    await saveResult(result)
-
-    send('done', {
-      assessmentId: result.projectId,
-      totalScore: result.totalScore,
-      rating: result.rating,
-      recommendation: result.recommendation,
-      agentSummaryCount: agentSummaries.length,
-    })
+    if (!aborted) {
+      result.agentSummaries = agentSummaries
+      await saveResult(result)
+      send('done', {
+        assessmentId: result.projectId,
+        totalScore: result.totalScore,
+        rating: result.rating,
+        recommendation: result.recommendation,
+        agentSummaryCount: agentSummaries.length,
+      })
+    }
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error'
     send('error', { message })

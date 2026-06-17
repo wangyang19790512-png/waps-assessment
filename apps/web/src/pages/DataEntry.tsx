@@ -244,7 +244,7 @@ export function DataEntry() {
 
   async function handleSubmit() {
     if (!basic.projectName.trim()) { setError('请填写项目名称'); setTab(0); return }
-    if (!vessel.loaM || !vessel.beamM || !vessel.serviceSpeedKn) { setError('请填写船舶必填字段（LOA、型宽、航速）'); setTab(1); return }
+    if (!(parseFloat(vessel.loaM) > 0) || !(parseFloat(vessel.beamM) > 0) || !(parseFloat(vessel.serviceSpeedKn) > 0)) { setError('请填写有效的船舶必填字段（LOA、型宽、航速须大于 0）'); setTab(1); return }
 
     setSubmitting(true); setError('')
     try {

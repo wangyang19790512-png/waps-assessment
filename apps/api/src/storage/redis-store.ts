@@ -8,6 +8,7 @@ function getRedis(): Redis {
   if (!_redis) {
     const url = process.env.REDIS_URL!
     _redis = new Redis(url, { lazyConnect: false, maxRetriesPerRequest: 3 })
+    _redis.on('error', (err) => console.error('[Redis] connection error:', err))
   }
   return _redis
 }

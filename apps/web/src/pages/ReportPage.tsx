@@ -38,7 +38,9 @@ export function ReportPage() {
     const a = document.createElement('a')
     a.href = url
     a.download = `waps-report-${id}.md`
+    document.body.appendChild(a)
     a.click()
+    document.body.removeChild(a)
     URL.revokeObjectURL(url)
   }
 

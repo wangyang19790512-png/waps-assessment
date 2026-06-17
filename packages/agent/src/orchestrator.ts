@@ -38,17 +38,25 @@ export async function runAllAgents(
   ]
 
   const total = specialists.length + 1
+  let completed = 0
 
-  for (let i = 0; i < specialists.length; i++) {
-    const spec = specialists[i]
-    onProgress?.(spec.name, i + 1, total)
-    try {
+  const settledResults = await Promise.allSettled(
+    specialists.map(async (spec) => {
       const summary = await spec.run()
-      summaries.push(summary)
-    } catch (err) {
-      console.error(`Agent ${spec.name} failed:`, err)
+      completed++
+      onProgress?.(spec.name, completed, total)
+      return summary
+    })
+  )
+
+  for (let i = 0; i < settledResults.length; i++) {
+    const r = settledResults[i]
+    if (r.status === 'fulfilled') {
+      summaries.push(r.value)
+    } else {
+      console.error(`Agent ${specialists[i].name} failed:`, r.reason)
       summaries.push({
-        agentName: spec.name,
+        agentName: specialists[i].name,
         summary: '（本模块分析暂时不可用）',
         keyFindings: [],
         recommendations: [],

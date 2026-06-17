@@ -30,6 +30,9 @@ export function getClient() {
             ...params.messages.map(m => ({ role: m.role as 'user' | 'assistant', content: m.content })),
           ],
         })
+        if (!completion.choices.length) {
+          throw new Error('DeepSeek returned empty choices — content may have been filtered or quota exceeded')
+        }
         return {
           content: [{ type: 'text', text: completion.choices[0].message.content ?? '' }],
         }

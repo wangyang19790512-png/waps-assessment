@@ -13,15 +13,22 @@ function ensureDir() {
   if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true })
 }
 
+function validateId(id: string): void {
+  if (!/^[a-zA-Z0-9_-]+$/.test(id)) throw new Error(`Invalid assessment id: "${id}"`)
+}
+
 function projectPath(id: string) {
+  validateId(id)
   return join(DATA_DIR, `${id}.json`)
 }
 
 function resultPath(id: string) {
+  validateId(id)
   return join(DATA_DIR, `${id}.result.json`)
 }
 
 function reportPath(id: string) {
+  validateId(id)
   return join(DATA_DIR, `${id}.report.md`)
 }
 
