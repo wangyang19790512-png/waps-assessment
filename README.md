@@ -5,7 +5,7 @@ Wind-Assisted Propulsion System (WAPS) feasibility assessment platform for ship 
 ## Features
 
 - 11 deterministic scoring dimensions (route, vessel, cargo, port, regulation, etc.)
-- 10 Claude Haiku AI agents for qualitative commentary per dimension
+- 10 DeepSeek AI agents for qualitative commentary per dimension
 - Real-time SSE progress streaming during analysis
 - Full Markdown report generation
 - Project CRUD with draft / completed workflow
@@ -17,8 +17,8 @@ Wind-Assisted Propulsion System (WAPS) feasibility assessment platform for ship 
 |-------|-----------|
 | Frontend | React 19, Vite, Tailwind CSS, react-router-dom v6 |
 | Backend | Express 4, TypeScript 5, tsx |
-| AI | Anthropic Claude Haiku (`@anthropic-ai/sdk`) |
-| Storage | JSON files (`apps/api/data/assessments/`) |
+| AI | DeepSeek Chat (`openai` SDK, DeepSeek-compatible endpoint) |
+| Storage | Redis (falls back to JSON files when `REDIS_URL` unset) |
 | Monorepo | pnpm workspaces |
 
 ## Project Structure
@@ -32,7 +32,7 @@ waps-assessment/
     ├── schemas/      # Zod schemas shared across packages
     ├── engine/       # 11 scoring engines (deterministic)
     ├── report/       # Markdown report generator
-    └── agent/        # Claude Haiku AI agents
+    └── agent/        # DeepSeek AI agents (10 specialist + 1 synthesis)
 ```
 
 ## Quick Start (Development)
@@ -41,7 +41,7 @@ waps-assessment/
 
 - Node.js 20+
 - pnpm 9+
-- Anthropic API key
+- DeepSeek API key (for AI agent analysis; optional for deterministic scoring only)
 
 ### Setup
 
@@ -51,7 +51,7 @@ pnpm install
 
 # 2. Set up environment
 cp .env.example .env
-# Edit .env and set ANTHROPIC_API_KEY=sk-ant-...
+# Edit .env and set DEEPSEEK_API_KEY=sk-...
 
 # 3. Start API server (terminal 1)
 pnpm dev:api
@@ -68,8 +68,9 @@ open http://localhost:5173
 The API server serves the built React app as static files.
 
 ```bash
-# 1. Set environment variable
-export ANTHROPIC_API_KEY=sk-ant-...
+# 1. Set environment variables
+export DEEPSEEK_API_KEY=sk-...
+export REDIS_URL=redis://localhost:6379   # optional
 
 # 2. Build frontend
 pnpm build:web
@@ -115,13 +116,19 @@ PORT=8080 pnpm start
 
 ## Data Storage
 
-Assessment data is persisted as JSON files under `apps/api/data/assessments/`:
+Storage backend is selected at runtime:
 
+| Condition | Backend |
+|-----------|---------|
+| `REDIS_URL` set | Redis (keys prefixed `waps:`) |
+| `REDIS_URL` unset | JSON files under `apps/api/data/assessments/` |
+
+Redis key layout:
 ```
-data/assessments/
-├── project-<uuid>.json   # Input data
-├── result-<uuid>.json    # Scoring results
-└── report-<uuid>.json    # Generated reports
+waps:project:<id>    # Input data (JSON)
+waps:result:<id>     # Scoring results (JSON)
+waps:report:<id>     # Generated Markdown report
+waps:projects        # Sorted set of all project IDs (by creation time)
 ```
 
 ## Disclaimer
